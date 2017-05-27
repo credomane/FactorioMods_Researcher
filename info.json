@@ -1,0 +1,10 @@
+{
+    "name": "researcher", 
+    "title": "Researcher [BETA]", 
+    "version": "0.15.1", 
+    "factorio_version": "0.15",
+    "author": "Credomane", 
+    "homepage": "https://github.com/credomane/FactorioMods_Researcher", 
+    "description": "Allows players to queue research. Spiritual successor to research-queue.",
+    "dependencies": []
+}
