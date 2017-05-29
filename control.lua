@@ -6,4 +6,4 @@ if not global.players then global.players = {} end
 require "researcher.main"
 require "researcher.commands"
 require "researcher.events"
-require "researcher.gui"
+require "researcher.gui.gui"

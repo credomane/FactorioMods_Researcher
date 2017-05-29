@@ -6,5 +6,5 @@ function researcher.init_all()
 end
 
 function researcher.init_player(player)
-    local pgui=gui.mk_mb(player)
+    gui.mk_mb(player)
 end
