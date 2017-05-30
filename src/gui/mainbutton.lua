@@ -1,23 +1,14 @@
-function gui.get_mb(player)
-    if player.gui.top.researcher_mb then
-        return player.gui.top.researcher_mb
-    else
-        return nil
-    end
-end
 
+--[[ Researcher GUI Main Button]]--
 function gui.rm_mb(player)
-    local researcher=gui.get_mb(player)
+    local researcher = gui.get(player, "researcher_mb")
     if researcher then
         researcher.destroy()
     end
 end
 
 function gui.mk_mb(player)
-
-gui.rm_mb(player)
-
-    local researcher=gui.get_mb(player)
+    local researcher = gui.get(player, "researcher_mb")
     if not researcher then
         player.gui.top.add({
             type = "button",
@@ -29,12 +20,7 @@ end
 
 function researcher_mb_click(event)
     local player = game.players[event.player_index]
-    local researcher=gui.get_frame(player)
-    if researcher then
-        gui.rm_frame(player)
-    else
-        gui.mk_frame(player)
-    end
+    gui.toggle_researcher(player)
 end
 
 Gui.on_click("researcher_mb", researcher_mb_click)
