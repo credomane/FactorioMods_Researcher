@@ -20,10 +20,9 @@ gui.rm_mb(player)
     local researcher=gui.get_mb(player)
     if not researcher then
         player.gui.top.add({
-            name = "researcher_mb",
-            caption = "R",
             type = "button",
-            
+            name = "researcher_mb",
+            caption = "R"
         })
     end
 end
