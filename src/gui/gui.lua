@@ -29,10 +29,35 @@ function gui.get(element, query, exact)
         return nil
     end
 
+    local matches = gui._get(element, query, exact)
+
+    if #matches == 0 then
+        return nil
+    end
+
+    if #matches == 1 then
+        return matches[1]
+    end
+
+    return matches
+end
+
+function gui._get(element, query, exact)
+    -- Do nothing if it isn't even valid.
+    if not element.valid then
+        return nil
+    end
+
+    --Workaround for Factorio throwing errors instead of returning the expected nil.
+    --For example LuaPlayer.children is nil. Instead Factorio will throw an error "LuaPlayer does not contain key "children" even with a pcall trap!
+    function table_contains(tbl, query)
+        return string.contains(tbl.help(), query)
+    end
+
     -- Is this a LuaGui or LuaGuiElement?
-    if not element.children then
+    if not table_contains(element, "LuaGui") then
         --Were we given a LuaPlayer directly?
-        if not element.gui then
+        if not table_contains(element, "LuaPlayer") then
             --Abort, abort, abort! What is this thing!?
             return nil
         end
@@ -46,46 +71,38 @@ function gui.get(element, query, exact)
     for _, child in pairs(element.children) do
         if exact then
             if child.name == query then
-                matches.insert(child)
+                table.insert(matches, child)
             end
         else
             if string.starts_with(query, "*") or string.ends_with(query, "*") then
                 if string.starts_with(query, "*") then
                     query = string.sub(query, 2, query.length) 
                     if string.starts_with(child.name, query) then
-                        matches.insert(child)
+                        table.insert(matches, child)
                     end
                 end
                 if string.starts_with(query, "*") and string.ends_with(query, "*") then
                     query = string.sub(query, 2, query.length - 1)
                     if string.contains(child.name, query) then
-                        matches.insert(child)
+                        table.insert(matches, child)
                     end
                 end
                 if string.ends_with(query, "*") then
                     query = string.sub(query, 1, query.length - 1)
                     if string.ends_with(child.name, query) then
-                        matches.insert(child)
+                        table.insert(matches, child)
                     end
                 end
             else
-                if string.matches(child.name, query) then
-                    matches.insert(child)
+                if string.match(child.name, query) then
+                    table.insert(matches, child)
                 end
             end
         end
         if child.children then
-            local tmp = gui.get(child, query, exact)
-            matches = table.merge(matches, tmp)
+            local tmp = gui._get(child, query, exact)
+            matches = table.merge(matches, tmp, true)
         end
-    end
-
-    if #matches == 0 then
-        return nil
-    end
-
-    if #matches == 1 then
-        return matches[1]
     end
 
     return matches

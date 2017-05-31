@@ -30,7 +30,7 @@ function gui.mk_researcher(player)
     gui.style.padding(researcher, 0)
 
     local container = researcher.add({
-        type = flow,
+        type = "flow",
         name = "researcher_container",
         direction = "horizontal"
     })
@@ -49,7 +49,7 @@ end
 
 function researcher_close_click(event)
     local player = game.players[event.player_index]
-    gui.rm_frame(player)
+    gui.rm_researcher(player)
 end
 
 Gui.on_click("researcher_close", researcher_close_click)
