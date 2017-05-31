@@ -48,16 +48,18 @@ function gui._get(element, query, exact)
         return nil
     end
 
-    --Workaround for Factorio throwing errors instead of returning the expected nil.
-    --For example LuaPlayer.children is nil. Instead Factorio will throw an error "LuaPlayer does not contain key "children" even with a pcall trap!
-    function table_contains(tbl, query)
-        return string.contains(tbl.help(), query)
+    --Workaround for Factorio throwing errors when accessing non-existent properties on Factorio Objects.
+    function contains(tbl, query)
+        if tbl[query] ~= nil then
+            return true
+        end
+        return nil
     end
 
     -- Is this a LuaGui or LuaGuiElement?
-    if not table_contains(element, "LuaGui") then
+    if not pcall(function() contains(element, "children") end) then
         --Were we given a LuaPlayer directly?
-        if not table_contains(element, "LuaPlayer") then
+        if not pcall(function() contains(element, "gui") end) then
             --Abort, abort, abort! What is this thing!?
             return nil
         end
